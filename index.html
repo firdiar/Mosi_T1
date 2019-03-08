@@ -3,36 +3,38 @@
     <head>
         <meta charset="UTF-8" />
         <title>Dont Sink - AgateID</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	
-		
-        <script type="text/javascript" src="src/assets/phaser-framework/phaser.js"></script>
-        <script type="text/javascript" src="src/assets/scenes/Boot.js"></script>
-        <script type="text/javascript" src="src/assets/scenes/Preload.js"></script> 
-        <script type="text/javascript" src="src/assets/scenes/MainMenu.js"></script>
+
+        <script type="text/javascript" src="assets/phaser-framework/phaser.js"></script>
+
+        <script type="text/javascript" src="assets/lib/lib.js"></script>
+
+        <script type="text/javascript" src="assets/scenes/Boot.js"></script>
+        <script type="text/javascript" src="assets/scenes/Preload.js"></script>
+        <script type="text/javascript" src="assets/scenes/MainMenu.js"></script>
 
     </head>
     <body style="padding: 0; margin: 0; background:#77dd77;">
-			
-				
-			
+
+
+
             <script type="text/javascript">
-				
-				
+
+
 				window.onload = function(){
-                        var game = new Phaser.Game(
-                            1280,
-							800,
-                            Phaser.AUTO,
-                            '',
-                        )
+          console.log(clamp(0,1,0));
+          var game = new Phaser.Game(
+              1280,
+              800,
+              Phaser.AUTO,
+              '',
+          )
 
-                        game.state.add('boot', Game.Boot)
-                        game.state.add('preload', Game.Preload)
-                        game.state.add('main_menu', Game.MainMenu)
+          game.state.add('boot', Game.Boot)
+          game.state.add('preload', Game.Preload)
+          game.state.add('mainmenu', Game.MainMenu)
 
-                        // Load boot scene
-						game.state.start('boot')
+          // Load boot scene
+          game.state.start('boot')
 				}
 			</script>
     </body>
