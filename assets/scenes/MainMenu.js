@@ -8,6 +8,7 @@ const ground = 680;
 // Objek
 let ketapel;
 let bird;
+let bird2;
 let babi;
 let line;
 let graphics;
@@ -18,11 +19,15 @@ let angleTxt;
 
 let shootPower;
 let shootAngle;
+let vy;
 let time;
+let time2;
 
 
 let isStart = false;
 let isClear = false;
+let running1 = false;
+let running2 = false;
 
 Game.MainMenu.prototype = {
     create : function(){
@@ -83,33 +88,76 @@ Game.MainMenu.prototype = {
 
 
         //
-      }else if(isStart && !isClear){
+      }else if(isStart && (running1 || running2)){
+
         // mengupdate time
         time += this.time.elapsed/1000;
 
-        // mendapatkan posisi berdasarkan Time
-        let pos = getCalculationPosition(time , shootAngle , shootPower , {x:100,y:(ketapel.y-ketapel.height)} );
+        /// TIME 1 ANALITICS
+        if(running1){
 
-        //memasukan posisi yang didapat dari fungsi ke objek
-        bird.x = pos.x;
-        bird.y = clamp(pos.y , -ground , ground );
 
-        if( Math.abs(time - Math.round(time)) <0.2){
-          // menggambar line perubahan posisi burung
-          graphics.lineStyle(0);
-          graphics.beginFill(0xFFFF0B, 0.5);
-          graphics.drawCircle(pos.x, pos.y, 5);
-          graphics.endFill();
+            // mendapatkan posisi berdasarkan Time
+            let pos = getCalculationPosition(time , shootAngle , shootPower , {x:100,y:(ketapel.y-ketapel.height)} );
+
+            //memasukan posisi yang didapat dari fungsi ke objek
+            bird.x = pos.x;
+            bird.y = clamp(pos.y , -ground , ground );
+
+            if( Math.abs(time - Math.round(time)) <0.15){
+              // menggambar line perubahan posisi burung
+              graphics.lineStyle(0);
+              graphics.beginFill(0xFFFF0B, 0.5);
+              graphics.drawCircle(pos.x, pos.y, 3);
+              graphics.endFill();
+            }
+
+            // membuat burung selalu di atas agar garis tidak munul
+            bird.bringToTop();
+            // menghentikan burung ketika sudah berada di tanah
+            if(bird.y == ground){
+              console.log(time);
+              running1 = false;
+            }
+            if (!running2 && time > 2){
+              running2 = true;
+            }
         }
 
-        // membuat burung selalu di atas agar garis tidak munul
-        bird.bringToTop();
 
-        // menghentikan burung ketika sudah berada di tanah
-        if(bird.y == ground){
-          console.log(time);
-          isClear = true;
+        /// TIME 2 NUMERICS
+        if(running2){
+
+            vy = vy + 10*this.time.elapsed/1000;
+
+            // mendapatkan posisi berdasarkan Time
+            let pos2 = getCalculationPositionNumerik(this.time.elapsed/1000 , shootAngle , shootPower , {x:bird2.x , y:bird2.y} , {x:100,y:(ketapel.y-ketapel.height)} , vy);
+
+            //memasukan posisi yang didapat dari fungsi ke objek
+            bird2.x = pos2.x;
+            bird2.y = clamp(pos2.y , -ground , ground );
+
+            if( Math.abs(time - Math.round(time)) <0.15){
+              // menggambar line perubahan posisi burung
+              graphics.lineStyle(0);
+              graphics.beginFill(0xAA00BB, 0.5);
+              graphics.drawCircle(pos2.x, pos2.y, 3);
+              graphics.endFill();
+            }
+
+            // membuat burung selalu di atas agar garis tidak munul
+            bird2.bringToTop();
+
+            // menghentikan burung ketika sudah berada di tanah
+            if(bird2.y == ground){
+              console.log(time);
+              running2 = false;
+            }
         }
+
+
+
+
       }
 
 
@@ -120,8 +168,20 @@ Game.MainMenu.prototype = {
       this.calculateCurrentGameData();
 
       isStart = true;
+      running1 = true;
+      running2 = false;
       graphics.clear();
       time = 0;
+      time2 = 0;
+      vy = (shootPower*Math.sin(shootAngle*Math.PI/180));
+
+
+      // duplicate object bird
+      // membuat objek burung
+      bird2 = this.add.sprite(100, (ketapel.y-ketapel.height), 'bird');
+      bird2.scale.setTo(0.2);
+      bird2.anchor.setTo(0.5);
+
 
       // mematikan input babi dan burung sehingga tidak dapat di sentuh lagi
       bird.inputEnabled = false;

@@ -33,6 +33,14 @@ function getCalculationPosition(time , angle , startSpeed , vectorStart){
 
 
 
+function getCalculationPositionNumerik(DeltaTime , angle , startSpeed ,vectorPrev , vectorStart , vy){
+
+    return { x : vectorPrev.x + startSpeed *Math.cos(angle* Math.PI/180) * DeltaTime,
+             y : vectorPrev.y + (vy*DeltaTime)}
+
+}
+
+
 
 
 // convert value
