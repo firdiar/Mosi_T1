@@ -6,23 +6,45 @@ function getImage(name){
   return "assets/img/"+name;
 }
 
-
-var Vector = function(x,y) {
-this.x = x;
-this.y = y;
-}
-
-Vector.prototype.normalize = function() {
-
-}
-
+//mendapatkan normalize vector
 function getNormalizeVector(x,y){
   var length = getLengthVector(x,y); //calculating length
-  x = x/length; //assigning new value to x (dividing x by lenght of the vector)
-  y= y/length; //assigning new value to y
+  if(length != 0){
+    x = x/length; //assigning new value to x (dividing x by lenght of the vector)
+    y = y/length; //assigning new value to y
+  }
   return {x:x , y:y};
 }
 
+// mendapatkan panjang vector
 function getLengthVector(x,y){
   return Math.sqrt(x*x+y*y);
+}
+
+// mendapatkan angle dari vector
+function getAngle(x, y) {
+  return Math.atan2(y, x) * 180 / Math.PI;
+}
+
+function getCalculationPosition(time , angle , startSpeed , vectorStart){
+  let g = 10;
+  return { x: vectorStart.x+startSpeed*Math.cos(angle*Math.PI/180)*time , y: vectorStart.y+(1/2)*g*(time*time) + startSpeed*Math.sin(angle* Math.PI/180)*time}
+}
+
+
+
+
+
+// convert value
+function NormalToGameY(gamey){
+    return height-gamey;
+}
+function NormalToGameX(gamex){
+    return gamex;
+}
+function GameToNormalY(gamey){
+    return height-gamey;
+}
+function GameToNormalX(gamex){
+    return gamex;
 }
