@@ -177,6 +177,7 @@ Game.MainMenu.prototype = {
 
     },
     startSimulation : function(){
+      button.inputEnabled = false;
       console.log("simulation start");
       // mendapatkan data
       this.calculateCurrentGameData();
