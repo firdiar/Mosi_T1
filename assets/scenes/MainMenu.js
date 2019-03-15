@@ -16,6 +16,7 @@ let vector;
 
 let powerTxt;
 let angleTxt;
+let heightTxt;
 
 let shootPower;
 let shootAngle;
@@ -45,6 +46,11 @@ Game.MainMenu.prototype = {
       ketapel.scale.setTo(0.2);
       ketapel.anchor.setTo(0.5 , 1);
       ketapel.headPos = { x: 100 , y: (ketapel.y-ketapel.height)}
+      ketapel.posY = ketapel.y;
+      //enable drag untuk objek ketapel
+      ketapel.inputEnabled = true;
+      ketapel.input.enableDrag();
+      ketapel.events.onDragUpdate.add(dragUpdateKetapel);
 
 
       // membuat objek burung
@@ -67,6 +73,7 @@ Game.MainMenu.prototype = {
       // inisiasi text
       powerTxt = this.add.text(100, 30, "Power : 0 m/s");
       angleTxt = this.add.text(500, 30, "Angle : 0");
+      heightTxt = this.add.text(700, 30, "Start Height : "+GameToNormalY(ketapel.y)+"m");
 
       for(let i = bird.x ; i < width ; i += 100){
         let t = this.add.text(i, height-100, (i-bird.x)+"m");
@@ -177,7 +184,7 @@ Game.MainMenu.prototype = {
 
     },
     startSimulation : function(){
-      button.inputEnabled = false;
+
       console.log("simulation start");
       // mendapatkan data
       this.calculateCurrentGameData();
@@ -200,11 +207,14 @@ Game.MainMenu.prototype = {
       bird2.txtPos.scale.setTo(3);
       bird2.txtPos.anchor.setTo(0.5);
       bird2.addChild(bird2.txtPos);
+      bird2.txtPos.text = "(x: "+Math.round(GameToNormalX(bird2.x)-100)+" , "+"y: "+Math.round(GameToNormalY(bird2.y)-GameToNormalY(ground))+")"
 
 
       // mematikan input babi dan burung sehingga tidak dapat di sentuh lagi
       bird.inputEnabled = false;
       babi.inputEnabled = false;
+      ketapel.inputEnabled = false;
+      button.inputEnabled = false;
 
     },
     calculateCurrentGameData : function(){
@@ -257,10 +267,30 @@ function dragUpdateBird(sprite, pointer, dragX, dragY, snapPoint) {
     // memasang vector pada sprite burung
     sprite.x = vector.x + ketapel.headPos.x;
     sprite.y = vector.y + ketapel.headPos.y;
+
+    //membuat line garis
     line.start.x = sprite.x + (vector2.x*10);
     line.start.y = sprite.y + (vector2.y*15);
 
     Game.MainMenu.prototype.calculateCurrentNormalData();
+}
+
+//berjalan setiap kita men drag ketapel
+function dragUpdateKetapel(sprite, pointer, dragX, dragY, snapPoint) {
+    // untuk membuat ketapel tidak bergerak ke kanan dan kiri
+    ketapel.x = 100;
+
+    ketapel.y = clamp(ketapel.y , NormalToGameY(499),NormalToGameY(-1));
+
+    let delta = ketapel.y - ketapel.posY;
+    bird.y += delta;
+    ketapel.headPos.y += delta;
+    line.start.y += delta;
+    line.end.y += delta;
+
+    heightTxt.text = "Start Height : "+Math.round(GameToNormalY(ketapel.y-ketapel.height) - GameToNormalY(ground) )+"m";
+
+    ketapel.posY = ketapel.y;
 }
 
 //berjalan setiap kita mendrag Babi
