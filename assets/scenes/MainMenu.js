@@ -51,6 +51,10 @@ Game.MainMenu.prototype = {
       bird = this.add.sprite(100, (ketapel.y-ketapel.height), 'bird');
       bird.scale.setTo(0.2);
       bird.anchor.setTo(0.5);
+      bird.txtPos= this.add.text(0,-150, "(x: 0 , y: 0)");
+      bird.txtPos.scale.setTo(3);
+      bird.txtPos.anchor.setTo(0.5);
+      bird.addChild(bird.txtPos);
       //enable drag untuk objek burung
       bird.inputEnabled = true;
       bird.input.enableDrag();
@@ -77,6 +81,7 @@ Game.MainMenu.prototype = {
 
     },
     update : function(){
+
       if(!isStart){
         // menggambar line (karet ketapel)
         graphics.clear();
@@ -122,6 +127,9 @@ Game.MainMenu.prototype = {
             if (!running2 && time > 2){
               running2 = true;
             }
+
+            //update position on the head
+            bird.txtPos.text = "(x: "+Math.round(GameToNormalX(bird.x)-100)+" , "+"y: "+Math.round(GameToNormalY(bird.y)-GameToNormalY(ground) )+")"
         }
 
 
@@ -148,11 +156,17 @@ Game.MainMenu.prototype = {
             // membuat burung selalu di atas agar garis tidak munul
             bird2.bringToTop();
 
+            //update position on the head
+            bird2.txtPos.text = "(x: "+Math.round(GameToNormalX(bird2.x)-100)+" , "+"y: "+Math.round(GameToNormalY(bird2.y)-GameToNormalY(ground))+")"
+
             // menghentikan burung ketika sudah berada di tanah
             if(bird2.y == ground){
               console.log(time);
               running2 = false;
+              this.add.text(150, 100,"Burung1 (ANALITICS) :"+bird.txtPos.text);
+              this.add.text(150, 150, "Burung2 (NUMERICS) :"+bird2.txtPos.text);
             }
+
         }
 
 
@@ -181,6 +195,10 @@ Game.MainMenu.prototype = {
       bird2 = this.add.sprite(100, (ketapel.y-ketapel.height), 'bird');
       bird2.scale.setTo(0.2);
       bird2.anchor.setTo(0.5);
+      bird2.txtPos= this.add.text(0,-150, "(x: 0 , y: 0)");
+      bird2.txtPos.scale.setTo(3);
+      bird2.txtPos.anchor.setTo(0.5);
+      bird2.addChild(bird2.txtPos);
 
 
       // mematikan input babi dan burung sehingga tidak dapat di sentuh lagi
