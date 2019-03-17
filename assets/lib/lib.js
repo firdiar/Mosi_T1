@@ -29,13 +29,18 @@ function getAngle(x, y) {
 // fungsi dari rumus analitik untuk mendapatkan posisi objek
 function getCalculationPositionAnalitik(time , angle , startSpeed , vectorStart){
   let g = 10;
-  return { x: vectorStart.x+startSpeed*Math.cos(angle*Math.PI/180)*time , y: vectorStart.y+(1/2)*g*(time*time) + startSpeed*Math.sin(angle* Math.PI/180)*time}
+  return {
+           x: vectorStart.x+startSpeed*Math.cos(angle*Math.PI/180)*time ,
+           y: vectorStart.y+(1/2)*g*(time*time) + startSpeed*Math.sin(angle* Math.PI/180)*time
+         }
 }
 
 // fungsi dari rumus numerik untuk mendapatkan posisi objek
 function getCalculationPositionNumerik(DeltaTime , angle , startSpeed ,vectorPrev , vectorStart , vy){
-    return { x : vectorPrev.x + startSpeed *Math.cos(angle* Math.PI/180) * DeltaTime,
-             y : vectorPrev.y + (vy*DeltaTime)}
+    return {
+             x : vectorPrev.x + startSpeed *Math.cos(angle* Math.PI/180) * DeltaTime,
+             y : vectorPrev.y + (vy*DeltaTime)
+           }
 }
 
 

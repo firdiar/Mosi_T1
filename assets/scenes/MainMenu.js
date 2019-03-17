@@ -110,7 +110,7 @@ Game.MainMenu.prototype = {
 
 
             // mendapatkan posisi berdasarkan Time
-            let pos = getCalculationPosition(time , shootAngle , shootPower , {x:100,y:(ketapel.y-ketapel.height)} );
+            let pos = getCalculationPositionAnalitik(time , shootAngle , shootPower , {x:100,y:(ketapel.y-ketapel.height)} );
 
             //memasukan posisi yang didapat dari fungsi ke objek
             bird.x = pos.x;
